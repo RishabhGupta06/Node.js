@@ -7,7 +7,7 @@ const fs = require("fs");
 
 // Async
 // fs.writeFile("./test.txt","Hey their",(err)=>{});
-
+// blocking
 // sync it return 
 // const read = fs.readFileSync("./contact.txt","utf-8");
 // console.log(read);

@@ -9,5 +9,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "youtuble": "node hello.js && node math.js"
-}
+  }
 }

@@ -9,14 +9,13 @@ app.use(express.urlencoded({extended: false})); // midleware pluging
 
 app.get("/users",(req,res)=>{
         const html =`
-    <ul>
+    
         ${user.map((user)=>`<li>${user.first_name}</li>`).join("")}
-    </ul>`;
+    `;
     res.send(html);
 });
 
 // rest api
-
 
 
 app.get('/api/users',(req,res)=>{
@@ -24,6 +23,8 @@ app.get('/api/users',(req,res)=>{
 });
 
 // :id -> dynamic
+
+
 app.get("/api/users/:id",(req,res)=>{
     const id = Number(req.params.id); // taking user no. from url
 
@@ -38,7 +39,7 @@ app.post('/api/users', (req,res) =>{
     const body = req.body;
     user.push({...body, id: user.length+1});
     fs.writeFile("./MOCK_DATA.json", JSON.stringify(user),(err,data)=>{
-        return res.json({status: "success", id: user.length+1});
+        return res.json({status: "success", id: user.length});
     });
     // return res.json({status: "pending"});
 });

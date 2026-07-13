@@ -7998,5 +7998,13 @@
         "email": "fatheyrr@latimes.com",
         "gender": "Male",
         "job_title": "Geological Engineer"
+    },
+    {
+        "first_name": "Rishabh",
+        "last_name": "Gupta",
+        "email": "reohfd@hgsfj.com",
+        "gender": "male",
+        "job_title": "CEO",
+        "id": 1001
     }
 ]

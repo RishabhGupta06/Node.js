@@ -46,14 +46,24 @@ app.post('/api/users', (req,res) =>{
 
 
 app.patch('/api/users/:id', (req,res) =>{
-    // todo
-    return res.json({status: "pending"});
+    const id = Number(req.params.id); // this is taking id from url
+    const body = req.body; // this is storing clint send the updated info
+    const updated = user.map(s => s.id === id ? { ...s,...body } : s);
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(updated),(err,data)=>{
+        return res.json({status: "success", id: id});
+    });
 });
 
 
 app.delete('/api/users/:id', (req,res) =>{
-    // todo
-    return res.json({status: "pending"});
+    const id = Number(req.params.id); // this is taking id from url
+    const body = req.body; // this is storing clint send the updated info
+    let i =1;
+    const updated = user.filter(s => s.id !== id);
+    const z = updated.map(s => i++ === s.id ? s : {...s, id: i-1});
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(z),(err,data)=>{
+        return res.json({status: "success", id: id});
+    });
 });
 
 

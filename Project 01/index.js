@@ -1,8 +1,10 @@
 const express = require("express");
 const user = require("./MOCK_DATA.json");
+const fs = require('fs')
 const app = express();
 const port = 8000;
 
+app.use(express.urlencoded({extended: false})); // midleware pluging
 
 
 app.get("/users",(req,res)=>{
@@ -14,6 +16,8 @@ app.get("/users",(req,res)=>{
 });
 
 // rest api
+
+
 
 app.get('/api/users',(req,res)=>{
     return res.json(user);
@@ -28,9 +32,15 @@ app.get("/api/users/:id",(req,res)=>{
     return res.json(x);
 });
 
+
+
 app.post('/api/users', (req,res) =>{
-    // todo
-    return res.json({status: "pending"});
+    const body = req.body;
+    user.push(body);
+    fs.writeFile("./MOCK_DATA.json", JSON.stringify(user),(err,data)=>{
+        return res.json({status: "success", id: user.length+1});
+    });
+    // return res.json({status: "pending"});
 });
 
 

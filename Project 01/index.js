@@ -49,7 +49,7 @@ app.post('/api/users', (req,res) =>{
     const body = req.body;
     user.push({...body, id: user.length+1});
     fs.writeFile("./MOCK_DATA.json", JSON.stringify(user),(err,data)=>{
-        return res.json({status: "success", id: user.length});
+        return res.status(201).json({status: "success", id: user.length});
     });
     // return res.json({status: "pending"});
 });

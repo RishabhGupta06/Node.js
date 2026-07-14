@@ -6,7 +6,17 @@ const port = 8000;
 
 app.use(express.urlencoded({extended: false})); // midleware pluging
 
-
+app.use((req,res,next)=>{
+    console.log("M1");
+    // res.send("ended");
+    next();
+})
+app.use((req,res,next)=>{
+    console.log("M2");
+    // res.send("iv");
+    // return res.end("ended")
+    next();
+})
 app.get("/users",(req,res)=>{
         const html =`
     

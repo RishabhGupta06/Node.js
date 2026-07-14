@@ -40,6 +40,10 @@ app.get("/api/users/:id",(req,res)=>{
 
     const x = user.find((user)=> user.id === id)
 
+    if(!x){
+          res.status(404);
+         return res.send("no");
+}
     return res.json(x);
 });
 
@@ -47,6 +51,10 @@ app.get("/api/users/:id",(req,res)=>{
 
 app.post('/api/users', (req,res) =>{
     const body = req.body;
+    if(!body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title){
+        res.status(400);
+        return res.json({msg: "All field are req.. "});
+    }
     user.push({...body, id: user.length+1});
     fs.writeFile("./MOCK_DATA.json", JSON.stringify(user),(err,data)=>{
         return res.status(201).json({status: "success", id: user.length});
@@ -60,7 +68,7 @@ app.patch('/api/users/:id', (req,res) =>{
     const body = req.body; // this is storing clint send the updated info
     const updated = user.map(s => s.id === id ? { ...s,...body } : s);
     fs.writeFile("./MOCK_DATA.json", JSON.stringify(updated),(err,data)=>{
-        return res.json({status: "success", id: id});
+        return res.status(201).json({status: "success", id: id});
     });
 });
 

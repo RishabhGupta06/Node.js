@@ -45,12 +45,16 @@ app.use((req,res,next)=>{
     // res.send("ended");
     next();
 })
+
+
 app.use((req,res,next)=>{
     console.log("M2");
     // res.send("iv");
     // return res.end("ended")
     next();
 })
+
+
 app.get("/users",(req,res)=>{
         const html =`
     
@@ -83,16 +87,23 @@ app.get("/api/users/:id",(req,res)=>{
 
 
 
-app.post('/api/users', (req,res) =>{
+app.post('/api/users', async(req,res) =>{
     const body = req.body;
     if(!body.first_name || !body.last_name || !body.email || !body.gender || !body.job_title){
         res.status(400);
         return res.json({msg: "All field are req.. "});
     }
-    user.push({...body, id: user.length+1});
-    fs.writeFile("./MOCK_DATA.json", JSON.stringify(user),(err,data)=>{
-        return res.status(201).json({status: "success", id: user.length});
-    });
+    const result = await User.create({
+        firstName: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        gender: body.gender,
+        jobtitle: body.job_title,
+    })
+
+    console.log("result", result);
+
+    return res.status(201).json({msg: "succes"});
     // return res.json({status: "pending"});
 });
 

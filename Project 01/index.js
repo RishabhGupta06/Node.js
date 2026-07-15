@@ -1,9 +1,43 @@
 const express = require("express");
+const fs = require('fs');
+const mongoose = require("mongoose");
+
+
+
+
+
 const user = require("./MOCK_DATA.json");
-const fs = require('fs')
 const app = express();
 const port = 8000;
 
+
+//
+
+mongoose.connect('mongodb://127.0.0.1:27017/youtuble-app-1').then(()=> console.log("MongoDB Connected")).catch((err) => console.log("Mongo Error", err));
+
+const schema = new mongoose.Schema({
+    firstName:{
+        type: String,
+        required: true,
+    },
+    last_name: {
+        type: String,
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true, 
+    },
+    jobtitle:{
+        type: String,
+    },
+    gender:{
+        type: String,
+    },
+});
+
+
+const User = mongoose.model("user",schema);
 app.use(express.urlencoded({extended: false})); // midleware pluging
 
 app.use((req,res,next)=>{

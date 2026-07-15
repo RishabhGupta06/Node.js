@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 
 
-const user = require("./MOCK_DATA.json");
+// const user = require("./MOCK_DATA.json");
 const app = express();
 const port = 8000;
 
@@ -34,7 +34,9 @@ const schema = new mongoose.Schema({
     gender:{
         type: String,
     },
-});
+},
+    {timestamps: true}
+);
 
 
 const User = mongoose.model("user",schema);
@@ -55,28 +57,26 @@ app.use((req,res,next)=>{
 })
 
 
-app.get("/users",(req,res)=>{
-        const html =`
-    
-        ${user.map((user)=>`<li>${user.first_name}</li>`).join("")}
-    `;
+app.get("/users",async (req,res)=>{
+    const alldbuser = await User.find({});
+    const html = `${alldbuser.map((user)=> `<li>${user.firstName} - ${user.email}</li>`).join("")}`;
     res.send(html);
 });
 
 // rest api
 
 
-app.get('/api/users',(req,res)=>{
-    return res.json(user);
+app.get('/api/users',async (req,res)=>{
+    const alldbuser = await User.find({});
+    return res.json(alldbuser);
 });
 
 // :id -> dynamic
 
 
-app.get("/api/users/:id",(req,res)=>{
-    const id = Number(req.params.id); // taking user no. from url
+app.get("/api/users/:id", async(req,res)=>{
+    const x  = await User.findById(req.params.id);
 
-    const x = user.find((user)=> user.id === id)
 
     if(!x){
           res.status(404);
@@ -103,30 +103,27 @@ app.post('/api/users', async(req,res) =>{
 
     console.log("result", result);
 
-    return res.status(201).json({msg: "succes"});
+    return res.status(201).json({msg: "succes"})
     // return res.json({status: "pending"});
 });
 
 
-app.patch('/api/users/:id', (req,res) =>{
-    const id = Number(req.params.id); // this is taking id from url
+app.patch('/api/users/:id', async(req,res) =>{
+    const id =req.params.id; // this is taking id from url
     const body = req.body; // this is storing clint send the updated info
-    const updated = user.map(s => s.id === id ? { ...s,...body } : s);
-    fs.writeFile("./MOCK_DATA.json", JSON.stringify(updated),(err,data)=>{
-        return res.status(201).json({status: "success", id: id});
+    await User.findByIdAndUpdate(id,{
+        firstName: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        jobtitle: body.job_title,
     });
+    return res.json({status: "sus"});
 });
 
 
-app.delete('/api/users/:id', (req,res) =>{
-    const id = Number(req.params.id); // this is taking id from url
-    const body = req.body; // this is storing clint send the updated info
-    let i =1;
-    const updated = user.filter(s => s.id !== id);
-    const z = updated.map(s => i++ === s.id ? s : {...s, id: i-1});
-    fs.writeFile("./MOCK_DATA.json", JSON.stringify(z),(err,data)=>{
-        return res.json({status: "success", id: id});
-    });
+app.delete('/api/users/:id', async(req,res) =>{
+    await User.findByIdAndDelete(req.params.id); // this is taking id from url
+    return res.json({status: "Success"});
 });
 
 
